@@ -7,10 +7,30 @@ app.set('view engine','jade');
 app.set('views','./views');  //templete 파일 디렉토리 지정
 app.use(express.static('public'));
 app.locals.pretty = true;  //code를 pretty하게 만들어줌
+
+app.get('/topic/:id', function(req, res){  //api reference 에서 express 명령어 사전 확인해라 
+	var topics = [
+		'Javascript is ...',
+		'Node is ...',
+		'Express is ...'
+	]
+	var output = `
+		<a href="/topic?id=0">Javascript</a><br>
+		<a href="/topic?id=1">Node</a><br>
+		<a href="/topic?id=2">Express is</a><br>
+		${topics[req.params.id]}
+	`
+
+	res.send(output);  //request에 따라 알맞는 res를 전달해준다.
+});
+app.get('/topic/:id/:mode', function(req, res){
+	res.send(req.params.id+","+req.params.mode);
+});
 app.get('/template', function(req, res){
 	res.render('temp', {time:Date(), _title:'Jade'});  //template경로를 통해 들어온 사용자에게 'temp' 파일을 웹페이지로 렌더링해서 전송한다.
 	//{} : jade 에서 표현하고싶은 변수입력
 });
+
 app.get('/', function(req, res){
 	res.send('hello homepage');   //call back
 });
