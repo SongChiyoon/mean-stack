@@ -1,13 +1,31 @@
 //entry application
 //routing
-var express = require('express');
-var app = express();
 
+
+var express = require('express');
+var bodyParser = require('body-parser');
+
+var app = express();
+app.use(bodyParser.urlencoded({ extended: true })); 
+// body-parser module 붙임. 이 middleware 를 post로 들어오는 data를 통과 후 붙는다
 app.set('view engine','jade');
 app.set('views','./views');  //templete 파일 디렉토리 지정
 app.use(express.static('public'));
 app.locals.pretty = true;  //code를 pretty하게 만들어줌
-
+app.get('/form', function(req, res){
+	res.render('form');
+});
+app.get('/form_receiver', function(req, res){  //form_receiver 의 방식이 get이다 -> post 로 바꿔주면 post 받을수 있다
+	var title = req.query.title;
+	var description = req.query.description;
+	res.send(title+','+description);
+});
+app.post('/form_receiver', function(req, res){  //post로 받은 data를 어떻게 나타낼 수 있는가? http://expressjs.com/en/4x/api.html#req.body
+	//body-parser 를 통해 들어오는 data를 읽자
+	var title = req.body.title;  //body-parser추가로 이 객체가 생성됨
+	var description = req.body.description;
+	res.send(title+','+description);
+});
 app.get('/topic/:id', function(req, res){  //api reference 에서 express 명령어 사전 확인해라 
 	var topics = [
 		'Javascript is ...',
