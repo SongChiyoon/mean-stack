@@ -1,0 +1,13 @@
+doctype html
+html
+	head
+	body
+		h1 Server side JavaScript
+		ul
+			each topic in topics
+				li
+					a(href='/topic/'+topic)= topic
+		article
+			h2= title
+			=description
+				

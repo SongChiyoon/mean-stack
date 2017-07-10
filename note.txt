@@ -1,0 +1,13 @@
+GET / POST
+
+GET : user 의 request를 통해 받아온다
+POST : 서버로 전송하는 방식.  // query string 붙지 않는다  
+왜?  data 전송 방식이 post 면 url을 통해 data 를 전송하지 않고, 다른 눈에 보이지 않는 방식으로 전송한다.
+
+
+언제 GET을 쓰고 POST를 쓰는지 ?
+
+query방식의 경우는 GET을 사용해야한다.
+
+르그인같은 감춰야 할 data를 전송해야 할 경우는 POST
+
