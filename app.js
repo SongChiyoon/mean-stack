@@ -41,6 +41,21 @@ app.get('/topic/:id', function(req, res){  //api reference 에서 express 명령
 
 	res.send(output);  //request에 따라 알맞는 res를 전달해준다.
 });
+app.get('/topic/:id', function(req, res){  //api reference 에서 express 명령어 사전 확인해라 
+	var topics = [
+		'Javascript is ...',
+		'Node is ...',
+		'Express is ...'
+	]
+	var output = `
+		<a href="/topic?id=0">Javascript</a><br>
+		<a href="/topic?id=1">Node</a><br>
+		<a href="/topic?id=2">Express is</a><br>
+		${topics[req.params.id]}
+	`
+
+	res.send(output);  //request에 따라 알맞는 res를 전달해준다.
+});
 app.get('/topic/:id/:mode', function(req, res){
 	res.send(req.params.id+","+req.params.mode);
 });
