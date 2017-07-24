@@ -72,6 +72,18 @@ app.post("/topic/:id/edit", function(req, res){
 		res.redirect('/topic/'+encodeURIComponent(id));
 	});
 });
+app.get("/topic/:id/delete", function(req, res){
+
+	console.log('delete');
+	var sql = 'DELETE FROM topic WHERE @rid=:rid'
+	var id = req.params.id;
+	db.query(sql, {
+		params:{
+			rid:id
+	}}).then(function(topics){
+		res.redirect('/topic');
+	});
+});
 app.get(['/topic', '/topic/:id'], function(req, res){
 	console.log("get topic");
 	var sql = 'SELECT FROM topic'
