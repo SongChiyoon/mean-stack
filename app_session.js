@@ -23,6 +23,21 @@ app.get('/count', function(req, res){
 	}
 	res.send("count :"+req.session.count);
 });
+
+app.get('/welcome', function(req, res){
+	if(req.session.displayname){
+		res.send(`
+			<h1>hello, ${req.session.displayname}</h1>
+			<a href="/auth/logout">logout</a>
+			`);
+	}else{
+		res.send(`
+			<h1>welcome</h1>
+			<a href="/auth/login">login</a>	
+			`)
+	}
+	res.send(req.session);
+});
 //기본적으로 express는 post를 처리해주지 않는다 -> body-parser사용!
 app.post('/auth/login', function(req, res){
 	var user ={
@@ -32,6 +47,7 @@ app.post('/auth/login', function(req, res){
 	var id = req.body.id;
 	var pw = req.body.pw;
 	if(id === user.username && pw === user.password){
+		req.session.displayname = user.username;
 		res.redirect('/welcome');
 	}
 	else{
