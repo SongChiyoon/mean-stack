@@ -38,6 +38,10 @@ app.get('/welcome', function(req, res){
 	}
 	res.send(req.session);
 });
+app.get('/auth/logout', function(req, res){
+	delete req.session.displayname;
+	res.redirect('/welcome');
+});
 //기본적으로 express는 post를 처리해주지 않는다 -> body-parser사용!
 app.post('/auth/login', function(req, res){
 	var user ={
