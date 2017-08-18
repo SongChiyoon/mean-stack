@@ -36,7 +36,6 @@ app.get('/welcome', function(req, res){
 			<a href="/auth/login">login</a>	
 			`)
 	}
-	res.send(req.session);
 });
 app.get('/auth/logout', function(req, res){
 	delete req.session.displayname;
@@ -44,6 +43,7 @@ app.get('/auth/logout', function(req, res){
 });
 //기본적으로 express는 post를 처리해주지 않는다 -> body-parser사용!
 app.post('/auth/login', function(req, res){
+	console.log("error detect");
 	var user ={
 		username : 'song',
 		password : '123222'
