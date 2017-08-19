@@ -28,13 +28,16 @@ app.get('/count', function(req, res){
   res.send('count : '+req.session.count);
 });
 app.get('/auth/logout', function(req, res){
-  delete req.session.displayName;
-  res.redirect('/welcome');
+  req.logout();
+  req.session.save(function(){
+  	res.redirect('/welcome');
+  })
+  
 });
 app.get('/welcome', function(req, res){
-  if(req.session.displayName) {
+  if(req.user && req.user.displayName) {
     res.send(`
-      <h1>Hello, ${req.session.displayName}</h1>
+      <h1>Hello, ${req.user.displayName}</h1>
       <a href="/auth/logout">logout</a>
     `);
   } else {
@@ -67,6 +70,24 @@ app.get('/welcome', function(req, res){
 //   }
 //   res.send('Who are you? 2<a href="/auth/login">login</a>');
 // });
+
+passport.serializeUser(function(user, done) {   //passport session 관리방법 
+	console.log("serializeUser",user);
+  	done(null, user.username);  //username 이 session에 저장된다. 
+});
+
+passport.deserializeUser(function(id, done) {
+	console.log("deserializeUser", id);
+		for(var i=0; i<users.length; i++){
+			var user = users[i];
+			if(user.username === id){
+				return done(null, user);   //이 user가 req의 user객체로 변환된다.
+			}
+	}
+	
+});
+
+//사용자가 맞는지 절차
 passport.use(new LocalStrategy(
 	function(username, password, done){
 		var uname = username;
@@ -76,6 +97,7 @@ passport.use(new LocalStrategy(
 		    if(uname === user.username) {
 		      return hasher({password:pwd, salt:user.salt}, function(err, pass, salt, hash){
 		        if(hash === user.password){
+		        	console.log('LocalStrategy', user);
 			          done(null, user); //로그인 성공. //null은 몬가? error처리 
 			          
 		        } else {
@@ -124,10 +146,10 @@ app.post('/auth/register', function(req, res){
       displayName:req.body.displayName
     };
     users.push(user);
-    req.session.displayName = req.body.displayName;
-    req.session.save(function(){
-      res.redirect('/welcome');
+    req.login(user, function(err){
+    	res.redirect('/welcome');
     });
+    
   });
 });
 app.get('/auth/register', function(req, res){
